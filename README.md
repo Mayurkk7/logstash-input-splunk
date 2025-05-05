@@ -140,3 +140,31 @@ splunk {
 ```
 ./logstash -f path-to-your-config-file.conf
 ```
+
+## Tracking State and Watermark Persistence
+
+The plugin tracks the current position of data by persisting a watermark, which is included directly within the Splunk search query. This allows Logstash to efficiently resume processing from the exact point where it left off, ensuring no data is missed or redundantly processed after a restart or failure.
+
+The plugin leverages _indextime and _cd (both created by default by Splunk during data ingestion) as part of a composite key. This key, consists of:
+
+_indextime (the time when the event was indexed into Splunk),
+
+bucket_id (extracted from _cd),
+
+offset (extracted from _cd),
+
+This ensures that only the new or unprocessed data since the last watermark position is retrieved, significantly reducing the risk of data duplication.
+
+To persist the watermark, the plugin uses Marshal module and a custom high-performance binary serialization mechanism in Ruby. The state is written to a storage file (e.g. state.dat) located in Logstash’s 'home/data/plugins/inputs/file/' directory. The use of binary serialization optimizes read/write performance, enabling fast and efficient recovery.
+
+In case of a crash, process failure or system restart, the plugin is designed to safely capture the operating system's signal and persist the current state of the watermark. This ensures no data is lost and processing resumes from the exact point it left off.
+
+#### Key Features:
+
+Efficient State Tracking: Watermark is embedded in the Splunk search query to track the data's position.
+
+Fast Serialization: Uses Marshal module and Ruby object serialization for fast state persistence in binary format.
+
+Crash Resilience: Captures operating system signals and persists the state during failure, ensuring no data redundancy.
+
+Optimized Recovery: Ensures Logstash resumes from the exact position using the stored watermark without redundant data processing.
