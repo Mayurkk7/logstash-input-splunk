@@ -17,7 +17,7 @@ Designed with flexibility and performance in mind, this plugin is fully configur
 
 [cols="<,<,<",options="header",]
 |=======================================================================
-|Setting |Input type|Required
+|Parameter |Input type|Required
 | splunk_url |<<string,string>>|Yes
 | username |<<string,string>>|Yes
 | password |<<string,string>>|Yes
