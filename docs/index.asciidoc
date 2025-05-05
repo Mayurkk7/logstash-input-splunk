@@ -1,32 +1,16 @@
-:plugin: example
-:type: input
-:default_codec: plain
-// Update header with plugin name and default codec
-
-///////////////////////////////////////////
-START - GENERATED VARIABLES, DO NOT EDIT!
-///////////////////////////////////////////
-:version: %VERSION%
-:release_date: %RELEASE_DATE%
-:changelog_url: %CHANGELOG_URL%
-:include_path: ../../../../logstash/docs/include
-///////////////////////////////////////////
-END - GENERATED VARIABLES, DO NOT EDIT!
-///////////////////////////////////////////
-
-[id="plugins-{type}s-{plugin}"]
-
-=== Example input plugin
-
-include::{include_path}/plugin_header.asciidoc[]
-
 ==== Description
 
-Add plugin description here
+The logstash-input-splunk plugin is a custom Logstash input plugin that enables direct ingestion of data from Splunk into Logstash. It was developed to bridge the gap between Splunk and the ELK stack, allowing users to unify their logging pipelines and perform deeper analysis using Elasticsearch and Kibana.
+
+This plugin supports Splunk's REST API for searching and exporting events, making it easier to extract data based on time ranges or specific queries. It is ideal for organizations migrating from Splunk, combining it with ELK, or needing hybrid log analysis.
+
+Designed with flexibility and performance in mind, this plugin is fully configurable and compatible with Logstash pipelines.
 
 // Format anchors and links to support generated ids for versioning
 // Sample anchor: [id="plugins-{type}s-{plugin}-setting_name"]
 // Sample link: <<plugins-{type}s-{plugin}-setting_name>>
+
+
 
 [id="plugins-{type}s-{plugin}-options"]
 ==== Example Input Configuration Options
@@ -34,84 +18,48 @@ Add plugin description here
 [cols="<,<,<",options="header",]
 |=======================================================================
 |Setting |Input type|Required
-| <<plugins-{type}s-{plugin}-a_setting_name>> |<<boolean,boolean>>|No
-| <<plugins-{type}s-{plugin}-another_setting_name>> |<<hash,hash>>|No
-| <<plugins-{type}s-{plugin}-setting_name_3>> |<<string,string>>|No
-| <<plugins-{type}s-{plugin}-setting_name_4>> |<<number,number>>|No
-| <<plugins-{type}s-{plugin}-setting_name_5>> |<<array,array>>|No
-| <<plugins-{type}s-{plugin}-setting_name_6>> |<<bytes,bytes>>|No
-| <<plugins-{type}s-{plugin}-setting_name_7>> |<<path,path>>|No
-| <<plugins-{type}s-{plugin}-setting_name_8>> |<<password,password>>|No
+| splunk_url |<<string,string>>|Yes
+| username |<<string,string>>|Yes
+| password |<<string,string>>|Yes
+| index |<<string,string>>|Yes
+| fetch_offset_limit |<<number,number>>|No
+| max_fetch_size_in_mb |<<number,number>>|No
 |=======================================================================
 
-[id="plugins-{type}s-{plugin}-a_setting_name"]
-===== `a_setting_name` 
+[id="plugins-{type}s-{plugin}-splunk_url"]
+===== `splunk_url` 
 
-  * Value type is <<boolean,boolean>>
-  * Default value is `true`
+  * Value type is string
+  * The base URL of your Splunk instance (e.g., https://localhost:8089). Used by the plugin to connect and fetch data via the       Splunk       REST API.
 
-Add description here
+[id="plugins-{type}s-{plugin}-username"]
+===== `username` 
 
-[id="plugins-{type}s-{plugin}-another_setting_name"]
-===== `another_setting_name` 
+  * Value type is string
+  * The username used to authenticate with your Splunk instance.
 
-  * Value type is <<hash,hash>>
-  * Default value is `{}`
+[id="plugins-{type}s-{plugin}-password"]
+===== `password` 
 
-Add description here
+  * Value type is string
+  * The corresponding password for the Splunk user.
 
-[id="plugins-{type}s-{plugin}-setting_name_3"]
-===== `setting_name_3` 
+[id="plugins-{type}s-{plugin}-index"]
+===== `index` 
 
-  * Value type is <<string,string>>
-  * Default value is `{}`
+  * Value type is string
+  * The name of the Splunk index from which events will be fetched.
 
-Add description here
+[id="plugins-{type}s-{plugin}-fetch_offset_limit"]
+===== `fetch_offset_limit` 
 
-[id="plugins-{type}s-{plugin}-setting_name_4"]
-===== `setting_name_4` 
+  * Value type is number
+  * Default value is 50
+  * The maximum number of events to retrieve per request from the Splunk API.
 
-  * Value type is <<number,number>>
-  * Default value is `0`
+[id="plugins-{type}s-{plugin}-max_fetch_size_in_mb"]
+===== `max_fetch_size_in_mb` 
 
-Add description here
-
-[id="plugins-{type}s-{plugin}-setting_name_5"]
-===== `setting_name_5` 
-
-  * Value type is <<array,array>>
-  * Default value is {}
-
-Add description here
-
-[id="plugins-{type}s-{plugin}-setting_name_6"]
-===== `setting_name_6` 
-
-  * Value type is <<bytes,bytes>>
-  * Default value is {}
-
-Add description here
-
-[id="plugins-{type}s-{plugin}-setting_name_7"]
-===== `setting_name_7` 
-
-  * Value type is <<path,path>>
-  * Default value is {}
-
-Add description here
-
-[id="plugins-{type}s-{plugin}-setting_name_8"]
-===== `setting_name_8` 
-
-  * Value type is <<password,password>>
-  * Default value is {}
-
-Add description here
-
-// The full list of Value Types is here: 
-// https://www.elastic.co/guide/en/logstash/current/configuration-file-structure.html
-
-[id="plugins-{type}s-{plugin}-common-options"]
-include::{include_path}/{type}.asciidoc[]
-
-:default_codec!:
+  * Value type is number
+  * Default value is 10
+  * The upper limit (in megabytes) of total event data to push into the Logstash queue in a single iteration.
