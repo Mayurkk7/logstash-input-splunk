@@ -1,4 +1,4 @@
-# Logstash Plugin
+# Logstash input plugin for Splunk
 
 ## Description
 
