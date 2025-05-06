@@ -4,7 +4,7 @@
 
 The logstash-input-splunk plugin is a custom Logstash input plugin that enables direct ingestion of data from Splunk into Logstash. It was developed to bridge the gap between Splunk and modern data pipelines, allowing users to unify their logging infrastructure and route data to various destinations for processing, storage, or analysis.
 
-By leveraging Splunk's REST API, the plugin supports searching and exporting events based on time ranges or specific queries. It integrates seamlessly into Logstash pipelines and is fully configurable to support a range of use cases — from migrating data to the Elastic Stack (Elasticsearch, Kibana) to forwarding it to Kafka, writing to flat files, or any other supported Logstash output.
+By leveraging Splunk's REST API, the plugin supports searching and exporting events based on time ranges or specific queries. It integrates seamlessly into Logstash pipelines and is fully configurable to support a range of use cases — from migrating data to the Elastic Stack (Elasticsearch, Kibana), to forwarding it to Kafka, writing to flat files, or any other supported Logstash output.
 
 Designed with flexibility and performance in mind, the plugin makes it easy to incorporate Splunk data into broader observability or data engineering workflows.
 
@@ -104,12 +104,13 @@ gem build logstash-input-splunk.gemspec
 
 - Navigate to the Logstash bin directory:
 ```
-cd path-to-your-logstash-directory/logstash/bin
+cd path/to/your/logstash/directory/logstash/bin
 ```
 - Install the plugin:
 ```
-./logstash-plugin install --no-verify /full/path/to/logstash-input-splunk-<version>.gem
+./logstash-plugin install --no-verify /path/to/logstash-input-splunk-<version>.gem
 ```
+- Mention the path of the gem that you built in the second step.
 
 #### 5. Verify Plugin Installation <br>
 - Navigate to the Logstash bin directory.
@@ -138,7 +139,7 @@ splunk {
 - Navigate to the Logstash bin directory.
 - Start the Logstash service to begin ingesting data from Splunk:
 ```
-./logstash -f path-to-your-config-file.conf
+./logstash -f /path/to/your/config_file.conf
 ```
 
 ## Tracking State and Watermark Persistence
@@ -157,7 +158,7 @@ This ensures that only the new or unprocessed data since the last watermark posi
 
 To persist the watermark, the plugin uses Marshal module and a custom high-performance binary serialization mechanism in Ruby. The state is written to a storage file (e.g. state.dat) located in Logstash’s 'home/data/plugins/inputs/file/' directory. The use of binary serialization optimizes read/write performance, enabling fast and efficient recovery.
 
-In case of a crash, process failure or system restart, the plugin is designed to safely capture the operating system's signal and persist the current state of the watermark. This ensures no data is lost and processing resumes from the exact point it left off.
+In case of a crash, process failure or system restart the plugin is designed to safely capture the operating system's signal and persist the current state of the watermark. This ensures no data is lost and processing resumes from the exact point it left off.
 
 #### Key Features:
 
@@ -167,4 +168,4 @@ Fast Serialization: Uses Marshal module and Ruby object serialization for fast s
 
 Crash Resilience: Captures operating system signals and persists the state during failure, ensuring no data redundancy.
 
-Optimized Recovery: Ensures Logstash resumes from the exact position using the stored watermark without redundant data processing.
+Optimized Recovery: Ensures Logstash resumes from the exact position where it left off using the stored watermark without redundant data processing.
